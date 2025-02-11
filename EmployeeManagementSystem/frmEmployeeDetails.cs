@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -225,6 +225,12 @@ namespace EmployeeManagementSystem
         {
             try
             {
+
+                if (!isValidData())
+                {
+                    return;
+                }
+
                 if (btnAdd.Text == "Add")
                 {
                     Employee objEmployee = new Employee();
@@ -317,6 +323,38 @@ namespace EmployeeManagementSystem
         {
             populateDataGridEmployeeBasedOnPaging(Convert.ToInt32(bindingNavigatorPositionItem.Text));
         }
+
+        private bool isValidData()
+        {
+
+            if (txtEmployeeName.Text == string.Empty)
+            {
+                MessageBox.Show("Please enter valid Name. ", "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (txtEmail.Text == string.Empty)
+            {
+                MessageBox.Show("Please enter valid Email. ", "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (cboGender.SelectedItem == null)
+            {
+                MessageBox.Show("Please select Gender. ", "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (cboStatus.SelectedItem == null)
+            {
+                MessageBox.Show("Please select Status. ", "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+
+        }
+
     }
 }
 
