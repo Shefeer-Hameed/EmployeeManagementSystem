@@ -10,13 +10,11 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Policy;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using Models;
 using Newtonsoft.Json;
-using RestSharp;
 using BusinessLogicLayer;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -36,7 +34,7 @@ namespace EmployeeManagementSystem
 
         private void frmEmployeeDetails_Load(object sender, EventArgs e)
         {
-            clearControls();
+            ClearControls();
             btnRefresh_Click(new object(), new EventArgs());
 
         }
@@ -63,12 +61,29 @@ namespace EmployeeManagementSystem
 
                 jsonString = await objEmployee_BLL.GetEmployeeDetailsBasedOnSearch(objEmployee, page, pageSize);
 
-                employeeList = JsonConvert.DeserializeObject<List<Employee>>(jsonString);
+                //employeeList = JsonConvert.DeserializeObject<List<Employee>>(jsonString);
+
+                int totalPages = 0;
+                if (jsonString.Contains("\"pages\":"))
+                {
+                    string totalPagesStr = jsonString.Substring(jsonString.IndexOf("\"pages\":") + 8, jsonString.IndexOf(",", jsonString.IndexOf("\"pages\":")) - jsonString.IndexOf("\"pages\":") - 8);
+                    if (totalPagesStr != string.Empty)
+                    {
+                        totalPages = Convert.ToInt32(totalPagesStr);
+                    }
+                }
+
+                if (jsonString.Contains("[{") && jsonString.Contains("}]"))
+                {
+                    string empDataString = jsonString.Substring(jsonString.IndexOf("[{"), jsonString.IndexOf("}]") - jsonString.IndexOf("[{") + 2);
+                    employeeList = JsonConvert.DeserializeObject<List<Employee>>(empDataString);
+                }
 
                 dgvEmployeeDetails.DataSource = employeeList;
 
+                List<int> pageNumberList = Enumerable.Range(1, totalPages).ToList();
                 BindingSource bindingSource = new BindingSource();
-                bindingSource.DataSource = dgvEmployeeDetails.DataSource;
+                bindingSource.DataSource = pageNumberList;
                 bindingNavigatorEmployee.BindingSource = bindingSource;
 
                 if (employeeList.Count == 0)
@@ -78,7 +93,7 @@ namespace EmployeeManagementSystem
             }
             catch (Exception ex)
             {
-                writeErrorLog(ex.Message);
+                WriteErrorLog(ex.Message);
             }
             finally
             {
@@ -105,14 +120,20 @@ namespace EmployeeManagementSystem
 
                 jsonString = await objEmployee_BLL.GetEmployeeDetailsBasedOnSearch(objEmployee, page, pageSize);
 
-                employeeList = JsonConvert.DeserializeObject<List<Employee>>(jsonString);
+                //employeeList = JsonConvert.DeserializeObject<List<Employee>>(jsonString);
+
+                if (jsonString.Contains("[{") && jsonString.Contains("}]"))
+                {
+                    string empDataString = jsonString.Substring(jsonString.IndexOf("[{"), jsonString.IndexOf("}]") - jsonString.IndexOf("[{") + 2);
+                    employeeList = JsonConvert.DeserializeObject<List<Employee>>(empDataString);
+                }
 
                 dgvEmployeeDetails.DataSource = employeeList;
 
             }
             catch (Exception ex)
             {
-                writeErrorLog(ex.Message);
+                WriteErrorLog(ex.Message);
             }
         }
 
@@ -165,11 +186,11 @@ namespace EmployeeManagementSystem
             }
             catch (Exception ex)
             {
-                writeErrorLog(ex.Message);
+                WriteErrorLog(ex.Message);
             }
         }
 
-        private void clearControls()
+        private void ClearControls()
         {
             txtEmployeeID.Text = string.Empty;
             txtEmployeeName.Text = string.Empty;
@@ -217,7 +238,7 @@ namespace EmployeeManagementSystem
             }
             catch (Exception ex)
             {
-                writeErrorLog(ex.Message);
+                WriteErrorLog(ex.Message);
             }
         }
 
@@ -226,7 +247,7 @@ namespace EmployeeManagementSystem
             try
             {
 
-                if (!isValidData())
+                if (!IsValidData())
                 {
                     return;
                 }
@@ -249,7 +270,7 @@ namespace EmployeeManagementSystem
 
                         MessageBox.Show("Created Successfully.");
 
-                        clearControls();
+                        ClearControls();
 
                         btnRefresh_Click(new object(), new EventArgs());
 
@@ -278,7 +299,7 @@ namespace EmployeeManagementSystem
 
                         MessageBox.Show("Update Successful.");
 
-                        clearControls();
+                        ClearControls();
 
                         btnRefresh_Click(new object(), new EventArgs());
 
@@ -292,39 +313,33 @@ namespace EmployeeManagementSystem
             }
             catch (Exception ex)
             {
-                writeErrorLog(ex.Message);
+                WriteErrorLog(ex.Message);
             }
 
         }
 
-        private void writeErrorLog(string errorMessage)
+        private void WriteErrorLog(string errorMessage)
         {
 
             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            objCommonClass.writeErrorLog(errorMessage);
+            objCommonClass.WriteErrorLog(errorMessage);
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            clearControls();
-        }
-
-
-        private void bindingNavigatorEmployee_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem == bindingNavigatorMoveNextItem || e.ClickedItem == bindingNavigatorMovePreviousItem || e.ClickedItem == bindingNavigatorMoveFirstItem || e.ClickedItem == bindingNavigatorMoveLastItem)
-            {
-
-            }
+            ClearControls();
         }
 
         private void bindingNavigatorPositionItem_TextChanged(object sender, EventArgs e)
         {
-            populateDataGridEmployeeBasedOnPaging(Convert.ToInt32(bindingNavigatorPositionItem.Text));
+            if (int.TryParse(bindingNavigatorPositionItem.Text, out _))
+            {
+                populateDataGridEmployeeBasedOnPaging(Convert.ToInt32(bindingNavigatorPositionItem.Text));
+            }
         }
 
-        private bool isValidData()
+        private bool IsValidData()
         {
 
             if (txtEmployeeName.Text == string.Empty)
@@ -355,6 +370,13 @@ namespace EmployeeManagementSystem
 
         }
 
+        private void bindingNavigatorPositionItem_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsDigit(e.KeyChar) || e.KeyChar == 8 || e.KeyChar == 46))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
 

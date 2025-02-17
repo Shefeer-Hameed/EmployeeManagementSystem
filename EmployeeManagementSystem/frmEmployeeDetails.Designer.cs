@@ -70,6 +70,7 @@
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bindingNavigatorPageLabel = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployeeDetails)).BeginInit();
             this.groupBoxEmployee.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -181,7 +182,7 @@
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.32637F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.67363F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 326F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 327F));
             this.tableLayoutPanel.Controls.Add(this.txtEmployeeID, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 3, 2);
             this.tableLayoutPanel.Controls.Add(this.lblEmployeeID, 0, 0);
@@ -217,7 +218,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btnAdd, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnClear, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(415, 81);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(414, 81);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -283,13 +284,13 @@
             // 
             this.txtEmail.Location = new System.Drawing.Point(93, 81);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(262, 20);
+            this.txtEmail.Size = new System.Drawing.Size(261, 20);
             this.txtEmail.TabIndex = 1;
             // 
             // lblGender
             // 
             this.lblGender.AutoSize = true;
-            this.lblGender.Location = new System.Drawing.Point(361, 0);
+            this.lblGender.Location = new System.Drawing.Point(360, 0);
             this.lblGender.Name = "lblGender";
             this.lblGender.Size = new System.Drawing.Size(42, 13);
             this.lblGender.TabIndex = 3;
@@ -298,7 +299,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(361, 39);
+            this.lblStatus.Location = new System.Drawing.Point(360, 39);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(37, 13);
             this.lblStatus.TabIndex = 3;
@@ -310,7 +311,7 @@
             this.cboGender.Items.AddRange(new object[] {
             "male",
             "female"});
-            this.cboGender.Location = new System.Drawing.Point(415, 3);
+            this.cboGender.Location = new System.Drawing.Point(414, 3);
             this.cboGender.Name = "cboGender";
             this.cboGender.Size = new System.Drawing.Size(184, 21);
             this.cboGender.TabIndex = 4;
@@ -321,7 +322,7 @@
             this.cboStatus.Items.AddRange(new object[] {
             "active",
             "inactive"});
-            this.cboStatus.Location = new System.Drawing.Point(415, 42);
+            this.cboStatus.Location = new System.Drawing.Point(414, 42);
             this.cboStatus.Name = "cboStatus";
             this.cboStatus.Size = new System.Drawing.Size(184, 21);
             this.cboStatus.TabIndex = 4;
@@ -395,6 +396,7 @@
             this.bindingNavigatorMoveFirstItem,
             this.bindingNavigatorMovePreviousItem,
             this.bindingNavigatorSeparator,
+            this.bindingNavigatorPageLabel,
             this.bindingNavigatorPositionItem,
             this.bindingNavigatorCountItem,
             this.bindingNavigatorSeparator1,
@@ -408,10 +410,9 @@
             this.bindingNavigatorEmployee.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigatorEmployee.Name = "bindingNavigatorEmployee";
             this.bindingNavigatorEmployee.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigatorEmployee.Size = new System.Drawing.Size(240, 25);
+            this.bindingNavigatorEmployee.Size = new System.Drawing.Size(273, 25);
             this.bindingNavigatorEmployee.TabIndex = 0;
             this.bindingNavigatorEmployee.Text = "bindingNavigator1";
-            this.bindingNavigatorEmployee.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bindingNavigatorEmployee_ItemClicked);
             // 
             // bindingNavigatorCountItem
             // 
@@ -449,10 +450,10 @@
             this.bindingNavigatorPositionItem.AutoSize = false;
             this.bindingNavigatorPositionItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bindingNavigatorPositionItem.Name = "bindingNavigatorPositionItem";
-            this.bindingNavigatorPositionItem.ReadOnly = true;
             this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(50, 23);
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
+            this.bindingNavigatorPositionItem.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.bindingNavigatorPositionItem_KeyPress);
             this.bindingNavigatorPositionItem.TextChanged += new System.EventHandler(this.bindingNavigatorPositionItem_TextChanged);
             // 
             // bindingNavigatorSeparator1
@@ -482,6 +483,12 @@
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bindingNavigatorPageLabel
+            // 
+            this.bindingNavigatorPageLabel.Name = "bindingNavigatorPageLabel";
+            this.bindingNavigatorPageLabel.Size = new System.Drawing.Size(33, 22);
+            this.bindingNavigatorPageLabel.Text = "Page";
             // 
             // frmEmployeeDetails
             // 
@@ -552,5 +559,6 @@
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveNextItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveLastItem;
         private System.Windows.Forms.ToolStripSeparator bindingNavigatorSeparator2;
+        private System.Windows.Forms.ToolStripLabel bindingNavigatorPageLabel;
     }
 }

@@ -7,11 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Models;
 using Newtonsoft.Json;
-using RestSharp;
 using System.Configuration;
 using System.Xml.Linq;
 using System.Net.Http.Headers;
-using System.Text.Json.Nodes;
 
 namespace BusinessLogicLayer
 {

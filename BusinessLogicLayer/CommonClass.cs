@@ -13,7 +13,7 @@ namespace BusinessLogicLayer
         public string ApiToken = ConfigurationManager.AppSettings["ApiToken"];
         public string PageSize = ConfigurationManager.AppSettings["PageSize"];
 
-        public void writeErrorLog(string errorMessage)
+        public void WriteErrorLog(string errorMessage)
         {
 
             //Console.WriteLine(errorMessage);
